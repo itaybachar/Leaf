@@ -3,3 +3,6 @@
 *.vcxproj
 *.user
 *.filters
+
+bin/
+bin-int/

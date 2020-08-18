@@ -8,5 +8,6 @@ public:
 };
 
 Leaf::Application* Leaf::CreateLeaf() {
+	
 	return new Sandbox();
 }

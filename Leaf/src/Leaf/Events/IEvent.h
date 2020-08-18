@@ -1,9 +1,7 @@
 #pragma once
+#include "lfpch.h"
 
 #include "Leaf/Core.h"
-
-#include <string>
-#include <functional>
 
 namespace Leaf {
 

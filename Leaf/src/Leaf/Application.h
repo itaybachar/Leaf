@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Leaf/Core.h"
-#include "Events/IEvent.h"
+#include "Leaf/Events/IEvent.h"
 
 namespace Leaf {
 	class LEAF_API Application

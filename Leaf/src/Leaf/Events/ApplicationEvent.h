@@ -1,8 +1,5 @@
 #pragma once
-
 #include "Leaf/Events/IEvent.h"
-
-#include <sstream>
 
 namespace Leaf {
 	

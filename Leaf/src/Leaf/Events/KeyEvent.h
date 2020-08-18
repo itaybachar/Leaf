@@ -2,8 +2,6 @@
 
 #include "Leaf/Events/IEvent.h"
 
-#include <sstream>
-
 namespace Leaf {
 
 	//Base key event class, virtual

@@ -11,6 +11,12 @@ workspace "Leaf"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+--Includes for 3rd party libraries
+IncludeDir = {}
+IncludeDir["GLFW"] = "Leaf/vendor/GLFW/include"
+
+include "Leaf/vendor/GLFW"
+
 project "Leaf"
 	location "Leaf"
 	kind "SharedLib"
@@ -19,6 +25,9 @@ project "Leaf"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "lfpch.h"
+	pchsource "Leaf/src/lfpch.cpp"
 
 	files
 	{
@@ -29,7 +38,14 @@ project "Leaf"
 	includedirs
 	{
 		"%{prj.name}/src/",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"

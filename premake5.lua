@@ -55,7 +55,8 @@ project "Leaf"
 		defines
 		{
 			"LF_PLATFORM_WINDOWS",
-			"LF_BUILD_DLL"
+			"LF_BUILD_DLL",
+			"LF_ASSERTS"
 		}
 
 		postbuildcommands

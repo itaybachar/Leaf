@@ -29,7 +29,7 @@ namespace Leaf {
 		//Debugging
 		virtual std::string ToString() const override{
 			std::stringstream s;
-			s << "Key Pressed: " << m_Keycode;
+			s << "Key Pressed: " << m_Keycode << ", Repeat: " << m_RepeatCount;
 			return s.str();
 		};
 

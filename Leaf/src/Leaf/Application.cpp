@@ -8,6 +8,8 @@
 namespace Leaf {
 	Application::Application()
 	{
+		m_Leaf = std::unique_ptr<Window>(Window::Create());
+		m_IsRunning = true;
 	}
 
 	Application::~Application()
@@ -16,10 +18,9 @@ namespace Leaf {
 
 	void Application::Run()
 	{
-		Leaf::WindowResizeEvent e2(840, 1230);
-		LF_CORE_INFO("{0}", e2);
-
-		while (true);
+		while (m_IsRunning) {
+			m_Leaf->OnUpdate();
+		}
 	}
 }
 

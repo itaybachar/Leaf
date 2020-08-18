@@ -70,14 +70,14 @@ namespace Leaf {
 
 		SET_EVENT_CATEGORY(InputEvent | MouseEvent)
 	protected:
-		MouseButtonEvent(int button)
+		MouseButtonEvent(int32_t button)
 			: m_MButton(button) {}
-		int m_MButton;
+		int32_t m_MButton;
 	};
 
 	class LEAF_API MouseButtonPressEvent : public MouseButtonEvent {
 	public:
-		MouseButtonPressEvent(int button)
+		MouseButtonPressEvent(int32_t button)
 			: MouseButtonEvent(button) {}
 
 		virtual std::string ToString() const override {

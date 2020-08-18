@@ -34,7 +34,6 @@ namespace Leaf {
 	};
 
 	//Mouse Scroll Event
-
 	class LEAF_API MouseScrollEvent : public IEvent {
 	public:
 		MouseScrollEvent(float xOff, float yOff)
@@ -63,16 +62,18 @@ namespace Leaf {
 		float m_YOffset;
 	};
 
+	
 	//Mouse Button Events
 	class LEAF_API MouseButtonEvent : public IEvent {
 	public:
-		inline int GetMouseButton() const { return m_MButton; }
+		inline int32_t GetMouseButton() const { return m_Button; }
 
-		SET_EVENT_CATEGORY(InputEvent | MouseEvent)
+		SET_EVENT_CATEGORY(MouseBEvent | MouseEvent | InputEvent)
 	protected:
 		MouseButtonEvent(int32_t button)
-			: m_MButton(button) {}
-		int32_t m_MButton;
+			: m_Button(button) {}
+
+		int32_t m_Button;
 	};
 
 	class LEAF_API MouseButtonPressEvent : public MouseButtonEvent {
@@ -82,7 +83,7 @@ namespace Leaf {
 
 		virtual std::string ToString() const override {
 			std::stringstream s;
-			s << "MouseButtonPressed: " << m_MButton;
+			s << "MouseButtonPressed: " << m_Button;
 			return s.str();
 		}
 
@@ -91,15 +92,16 @@ namespace Leaf {
 
 	class LEAF_API MouseButtonReleaseEvent : public MouseButtonEvent {
 	public:
-		MouseButtonReleaseEvent(int button)
+		MouseButtonReleaseEvent(int32_t button)
 			: MouseButtonEvent(button) {}
 
 		virtual std::string ToString() const override {
 			std::stringstream s;
-			s << "MouseButtonReleased: " << m_MButton;
+			s << "MouseButtonReleased: " << m_Button;
 			return s.str();
 		}
 
 		SET_EVENT_TYPE(OnMouseButtonRelease)
 	};
+	
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "lfpch.h"
-
 #include "Leaf/Core.h"
 
 namespace Leaf {
@@ -21,7 +20,7 @@ namespace Leaf {
 		None = 0,
 		ApplicationEvent = BIT(0),
 		InputEvent = BIT(1),
-		MouseEvent = BIT(2), MouseButtonEvent = BIT(3),
+		MouseEvent = BIT(2), MouseBEvent = BIT(3),
 		KeyboardEvent = BIT(4)
 	};
 
@@ -55,7 +54,7 @@ namespace Leaf {
 								virtual EventType GetEventType() const override { return GetStaticEventType(); }\
 								virtual const char* GetName() const override { return #type; }
 									
-#define SET_EVENT_CATEGORY(category) virtual int GetCategory() const override{ return category; }
+#define SET_EVENT_CATEGORY(category) virtual int32_t GetCategory() const override{ return category; }
 
 	//Event Dispatcher Class
 	//Handles wether the event will call on a callback
@@ -72,8 +71,8 @@ namespace Leaf {
 		bool DispatchEvent(EventCallback<T> callback)
 		{
 			//Check if the event matches the input static type
-			if (ev.GetEventType() == T::GetStaticEventType()) {
-				ev.m_isHandled = callback(*(T*)&m_Event);
+			if (m_Event.GetEventType() == T::GetStaticEventType()) {
+				m_Event.m_isHandled = callback(*(T*)&m_Event);
 
 				//Callback was called
 				return true;

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Leaf/Events/IEvent.h"
 
 namespace Leaf {
@@ -49,7 +48,7 @@ namespace Leaf {
 		//Debugging
 		virtual std::string ToString() const override {
 			std::stringstream s;
-			s << "Key Released: " << "" << m_Keycode << "]";
+			s << "Key Released: " << m_Keycode;
 			return s.str();
 		};
 

@@ -41,7 +41,7 @@ namespace Leaf {
 		WindowFocusEvent() {}
 
 		inline std::string ToString() const override {
-			return "Window Focused";
+			return "Window Gained Focused";
 		}
 
 		SET_EVENT_TYPE(OnWindowFocus)

@@ -33,6 +33,9 @@ namespace Leaf {
 
 	void WindowsWindow::OnUpdate()
 	{
+		glClearColor(0.9f, 0.9f, 0.9f,1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 	}
@@ -75,61 +78,61 @@ namespace Leaf {
 			Data& data = *(Data*)glfwGetWindowUserPointer(window);
 
 			switch (actions) {
-				case GLFW_PRESS:
-				{
-					KeyPressEvent e(keycode, 0);
-					data.callback(e);
-					break;
-				}
-				case GLFW_RELEASE:
-				{
-					KeyReleaseEvent e(keycode);
-					data.callback(e);
-					break;
-				}
-				case GLFW_REPEAT:
-				{
-					KeyPressEvent e(keycode, 1);
-					data.callback(e);
-					break;
-				}
+			case GLFW_PRESS:
+			{
+				KeyPressEvent e(keycode, 0);
+				data.callback(e);
+				break;
 			}
-		});
+			case GLFW_RELEASE:
+			{
+				KeyReleaseEvent e(keycode);
+				data.callback(e);
+				break;
+			}
+			case GLFW_REPEAT:
+			{
+				KeyPressEvent e(keycode, 1);
+				data.callback(e);
+				break;
+			}
+			}
+			});
 
 		//Mouse
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos) {
 			Data& data = *(Data*)glfwGetWindowUserPointer(window);
-			
+
 			MouseMoveEvent e((float)xPos, (float)yPos);
 			data.callback(e);
-		});
+			});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int actions, int mods) {
 			Data& data = *(Data*)glfwGetWindowUserPointer(window);
 
 			switch (actions) {
-				case GLFW_PRESS:
-				{
-					MouseButtonPressEvent e(button);
-					data.callback(e);
-					break;
-				}
-				case GLFW_RELEASE:
-				{
-					MouseButtonReleaseEvent e(button);
-					data.callback(e);
-					break;
-				}
+			case GLFW_PRESS:
+			{
+				MouseButtonPressEvent e(button);
+				data.callback(e);
+				break;
 			}
-		});
+			case GLFW_RELEASE:
+			{
+				MouseButtonReleaseEvent e(button);
+				data.callback(e);
+				break;
+			}
+			}
+			});
 
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
 
 			Data& data = *(Data*)glfwGetWindowUserPointer(window);
-			
+
 			MouseScrollEvent e((float)xOffset, (float)yOffset);
 			data.callback(e);
-		});
+			});
 
 		//App
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
@@ -140,33 +143,33 @@ namespace Leaf {
 
 			WindowResizeEvent e(width, height);
 			data.callback(e);
-		});
+			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
 			Data& data = *(Data*)glfwGetWindowUserPointer(window);
-			
+
 			WindowCloseEvent e;
 			data.callback(e);
-		});
+			});
 
 		glfwSetWindowFocusCallback(m_Window, [](GLFWwindow* window, int focused) {
 			Data& data = *(Data*)glfwGetWindowUserPointer(window);
 
 			switch (focused) {
 			case GLFW_TRUE:
-				{
-					WindowFocusEvent e;
-					data.callback(e);
-					break;
-				}
-				case GLFW_FALSE:
-				{
-					WindowLostFocusEvent e;
-					data.callback(e);
-					break;
-				}
+			{
+				WindowFocusEvent e;
+				data.callback(e);
+				break;
 			}
-		});
+			case GLFW_FALSE:
+			{
+				WindowLostFocusEvent e;
+				data.callback(e);
+				break;
+			}
+			}
+			});
 
 		//Turn on VSync by default
 		SetVSync(true);

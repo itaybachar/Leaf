@@ -17,16 +17,25 @@ namespace Leaf {
 
 	void Application::OnEvent(IEvent& e)
 	{
-		LF_CORE_TRACE(e);
+		for (auto it = m_Layers.end(); it != m_Layers.begin();) {
+			(*--it)->OnEvent(e);
+			if (e.IsHandled())
+				break;
+		}
 
+		//Window Close
 		EventDispatcher handler(e);
-
 		handler.DispatchEvent<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 	}
 
 	void Application::Run()
 	{
 		while (m_IsRunning) {
+
+			for (Layer* l : m_Layers) {
+				l->OnUpdate();
+			}
+
 			m_Leaf->OnUpdate();
 		}
 	}

@@ -5,6 +5,7 @@
 #include "Leaf/Window.h"
 
 #include "Leaf/Events/ApplicationEvent.h"
+#include "Leaf/LayerStack.h"
 
 namespace Leaf {
 	class LEAF_API Application
@@ -12,6 +13,9 @@ namespace Leaf {
 	public:
 		Application();
 		virtual ~Application();
+
+		inline void PushLayer(Layer* l) { m_Layers.PushLayer(l); }
+		inline void PushOverlay(Layer* l) { m_Layers.PushOverlay(l); }
 
 		void OnEvent(IEvent& e);
 
@@ -21,6 +25,8 @@ namespace Leaf {
 
 	private:
 		std::unique_ptr<Window> m_Leaf;
+		LayerStack m_Layers;
+
 		bool m_IsRunning;
 	};
 

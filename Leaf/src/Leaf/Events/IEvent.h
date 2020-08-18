@@ -44,8 +44,12 @@ namespace Leaf {
 			return GetCategory() & category;
 		}
 
+		inline bool IsHandled() const {
+			return m_IsHandled;
+		}
+
 	protected:
-		bool m_isHandled;
+		bool m_IsHandled;
 	};
 
 	//WINDOWS SPECIFIC
@@ -72,7 +76,7 @@ namespace Leaf {
 		{
 			//Check if the event matches the input static type
 			if (m_Event.GetEventType() == T::GetStaticEventType()) {
-				m_Event.m_isHandled = callback(*(T*)&m_Event);
+				m_Event.m_IsHandled = callback(*(T*)&m_Event);
 
 				//Callback was called
 				return true;

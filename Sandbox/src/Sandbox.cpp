@@ -5,7 +5,6 @@ public:
 	ExampleLayer(const std::string name)
 		: Leaf::Layer(name)
 	{
-
 	}
 
 	virtual void OnAttach() override {
@@ -29,9 +28,7 @@ class Sandbox : public Leaf::Application
 {
 public:
 	Sandbox() {
-		//PushLayer(new ExampleLayer("Layer1"));
-		//PushOverlay(new ExampleLayer("Overlay1"));
-		PushOverlay(new Leaf::ImGuiLayer());
+		PushLayer(new ExampleLayer("Layer1"));
 	}
 	~Sandbox() {}
 };

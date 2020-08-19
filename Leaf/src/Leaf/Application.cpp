@@ -16,6 +16,10 @@ namespace Leaf {
 		m_Leaf = std::unique_ptr<Window>(Window::Create());
 		m_Leaf->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		m_IsRunning = true;
+
+		//Create ImGui Layer
+		m_ImGuiLayer = new ImGuiLayer();
+		m_Layers.PushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -44,9 +48,17 @@ namespace Leaf {
 			glClearColor(0.9f, 0.9f, 0.9f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			//Render normal opengl first
 			for (Layer* l : m_Layers) {
 				l->OnUpdate();
 			}
+
+			//Render ImGui
+			m_ImGuiLayer->Begin();
+			for (Layer* l : m_Layers) {
+				l->OnImGuiUpdate();
+			}
+			m_ImGuiLayer->End();
 
 			m_Leaf->OnUpdate();
 		}

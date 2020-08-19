@@ -14,6 +14,7 @@ namespace Leaf {
 		virtual void OnDetach() {}
 
 		virtual void OnUpdate() {}
+		virtual void OnImGuiUpdate() {}
 		virtual void OnEvent(IEvent& e) {}
 
 		inline const std::string& GetName() const { return m_Name; };

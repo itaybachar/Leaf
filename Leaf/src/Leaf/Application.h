@@ -1,11 +1,14 @@
 #pragma once
 
 #include "Leaf/Core.h"
-#include "Leaf/Events/IEvent.h"
+
 #include "Leaf/Window.h"
 
+#include "Leaf/Events/IEvent.h"
 #include "Leaf/Events/ApplicationEvent.h"
+
 #include "Leaf/LayerStack.h"
+#include "Leaf/ImGui/ImGuiLayer.h"
 
 namespace Leaf {
 	class LEAF_API Application
@@ -28,6 +31,8 @@ namespace Leaf {
 
 	private:
 		std::unique_ptr<Window> m_Leaf;
+
+		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_Layers;
 
 		bool m_IsRunning;

@@ -2,7 +2,6 @@
 #include "Leaf/Core.h"
 
 namespace Leaf {
-	
 	class LEAF_API Inputs {
 	public:
 		static bool IsKeyPressed(int keycode);

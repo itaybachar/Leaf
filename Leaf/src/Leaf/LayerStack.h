@@ -23,6 +23,6 @@ namespace Leaf {
 
 	private:
 		std::vector<Layer*> m_LayerStack;
-		std::vector<Layer*>::iterator m_CurrentPosition;
+		uint32_t m_CurrentPositionIndex = 0;
 	};
 }

@@ -5,7 +5,6 @@ namespace Leaf {
 
 	LayerStack::LayerStack()
 	{
-		m_CurrentPosition = m_LayerStack.begin();
 	}
 
 	LayerStack::~LayerStack()
@@ -16,7 +15,8 @@ namespace Leaf {
 
 	void LayerStack::PushLayer(Layer* l)
 	{
-		m_CurrentPosition = m_LayerStack.emplace(m_CurrentPosition, l);
+		 m_LayerStack.emplace(m_LayerStack.begin() + m_CurrentPositionIndex, l);
+		 m_CurrentPositionIndex++;
 		l->OnAttach();
 	}
 
@@ -25,7 +25,7 @@ namespace Leaf {
 		auto pos = std::find(m_LayerStack.begin(), m_LayerStack.end(), l);
 		if (pos != m_LayerStack.end()) {
 			m_LayerStack.erase(pos);
-			m_CurrentPosition--;
+			m_CurrentPositionIndex--;
 			l->OnDetach();
 		}
 	}

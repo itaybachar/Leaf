@@ -1,10 +1,6 @@
 #pragma once
 #include "Leaf/Layer.h"
 
-#include "Leaf/Events/MouseEvent.h"
-#include "Leaf/Events/KeyEvent.h"
-#include "Leaf/Events/ApplicationEvent.h"
-
 namespace Leaf {
 	class LEAF_API ImGuiLayer : public Layer {
 	public:
@@ -15,21 +11,11 @@ namespace Leaf {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
+		virtual void OnImGuiUpdate() override;
 
-		virtual void OnUpdate() override;
-		virtual void OnEvent(IEvent& e) override;
-
-		bool OnMousePress(MouseButtonPressEvent& e);
-		bool OnMouseRelease(MouseButtonReleaseEvent& e);
-		bool OnMouseMove(MouseMoveEvent& e);
-		bool OnMouseScroll(MouseScrollEvent& e);
-
-		bool OnKeyPress(KeyPressEvent& e);
-		bool OnKeyRelease(KeyReleaseEvent& e);
-		bool OnKeyTyped(KeyTypedEvent& e);
-
-		bool OnResize(WindowResizeEvent& e);
-
+		//Starts and Ends setup for rendering ImGui, all draw calls will be called between begin and end
+		void Begin();
+		void End();
 	private:
 		double m_Time;
 	};

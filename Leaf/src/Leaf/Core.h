@@ -1,5 +1,5 @@
 #pragma once
-
+#include <memory>
 #ifdef LF_PLATFORM_WINDOWS
 	#ifdef LF_BUILD_DLL
 		#define LEAF_API __declspec(dllexport)

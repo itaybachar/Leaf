@@ -1,6 +1,4 @@
 #pragma once
-#include "lfpch.h"
-
 #include "Leaf/Events/IEvent.h"
 
 namespace Leaf {

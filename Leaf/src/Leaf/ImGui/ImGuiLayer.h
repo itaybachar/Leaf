@@ -9,7 +9,7 @@ namespace Leaf {
 	class LEAF_API ImGuiLayer : public Layer {
 	public:
 		ImGuiLayer ()
-			: Layer("ImGui Layer") {}
+			: Layer("ImGui Layer"), m_Time(0) {}
 		
 		~ImGuiLayer();
 

@@ -22,7 +22,7 @@ namespace Leaf {
 		void Run();
 
 		inline static Application& Get() { return *s_Instance; }
-		inline Window& GetNativeWindow() { return *m_Leaf; }
+		inline Window& GetWindow() { return *m_Leaf; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 

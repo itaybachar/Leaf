@@ -3,9 +3,11 @@
 #include "Leaf/Application.h"
 #include "platforms/OpenGL/ImGuiRenderer.h"
 #include "Leaf/Logger.h"
+#include "Leaf/KeyCodes.h"
+#include "Leaf/Inputs.h";
 
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <GLFW\glfw3.h>
 
 namespace Leaf {
 
@@ -21,30 +23,30 @@ namespace Leaf {
 		ImGuiIO& io = ImGui::GetIO();
 		io.BackendFlags |= ImGuiBackendFlags_::ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_::ImGuiBackendFlags_HasSetMousePos;
-
+		io.KeyMap[ImGuiKey_Tab] = LF_KEY_SPACE;
 		// Keyboard mapping.
-		io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
-		io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
-		io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
-		io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
-		io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
-		io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-		io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-		io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-		io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-		io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-		io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
-		io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
-		io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
-		io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
-		io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
-		io.KeyMap[ImGuiKey_KeyPadEnter] = GLFW_KEY_KP_ENTER;
-		io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
-		io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
-		io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
-		io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
-		io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
-		io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
+		io.KeyMap[ImGuiKey_Tab] = LF_KEY_TAB;
+		io.KeyMap[ImGuiKey_LeftArrow] = LF_KEY_LEFT;
+		io.KeyMap[ImGuiKey_RightArrow] = LF_KEY_RIGHT;
+		io.KeyMap[ImGuiKey_UpArrow] = LF_KEY_UP;
+		io.KeyMap[ImGuiKey_DownArrow] = LF_KEY_DOWN;
+		io.KeyMap[ImGuiKey_PageUp] = LF_KEY_PAGE_UP;
+		io.KeyMap[ImGuiKey_PageDown] = LF_KEY_PAGE_DOWN;
+		io.KeyMap[ImGuiKey_Home] = LF_KEY_HOME;
+		io.KeyMap[ImGuiKey_End] = LF_KEY_END;
+		io.KeyMap[ImGuiKey_Insert] = LF_KEY_INSERT;
+		io.KeyMap[ImGuiKey_Delete] = LF_KEY_DELETE;
+		io.KeyMap[ImGuiKey_Backspace] = LF_KEY_BACKSPACE;
+		io.KeyMap[ImGuiKey_Space] = LF_KEY_SPACE;
+		io.KeyMap[ImGuiKey_Enter] = LF_KEY_ENTER;
+		io.KeyMap[ImGuiKey_Escape] = LF_KEY_ESCAPE;
+		io.KeyMap[ImGuiKey_KeyPadEnter] = LF_KEY_KP_ENTER;
+		io.KeyMap[ImGuiKey_A] = LF_KEY_A;
+		io.KeyMap[ImGuiKey_C] = LF_KEY_C;
+		io.KeyMap[ImGuiKey_V] = LF_KEY_V;
+		io.KeyMap[ImGuiKey_X] = LF_KEY_X;
+		io.KeyMap[ImGuiKey_Y] = LF_KEY_Y;
+		io.KeyMap[ImGuiKey_Z] = LF_KEY_Z;
 
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
@@ -57,11 +59,14 @@ namespace Leaf {
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto& app = Application::Get();
-		io.DisplaySize = ImVec2(app.GetNativeWindow().GetWidth(), app.GetNativeWindow().GetHeight());
+		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
-		double time = glfwGetTime();
-		io.DeltaTime = time > 0.0 ? (time - m_Time) : (1.0f / 60.0f);
+		double time = (double)glfwGetTime();
+		io.DeltaTime = time > 0.0 ? (float)(time - m_Time) : (1.0f / 60.0f);
 		m_Time = time;
+
+		if (Inputs::IsKeyPressed(LF_KEY_TAB))
+			LF_CORE_WARN("Tab is pressed!");
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
@@ -124,10 +129,10 @@ namespace Leaf {
 		ImGuiIO& io = ImGui::GetIO();
 		io.KeysDown[e.GetKeycode()] = true;
 
-		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
-		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
-		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+		io.KeyCtrl = io.KeysDown[LF_KEY_LEFT_CONTROL] || io.KeysDown[LF_KEY_RIGHT_CONTROL];
+		io.KeyShift = io.KeysDown[LF_KEY_LEFT_SHIFT] || io.KeysDown[LF_KEY_RIGHT_SHIFT];
+		io.KeyAlt = io.KeysDown[LF_KEY_LEFT_ALT] || io.KeysDown[LF_KEY_RIGHT_ALT];
+		io.KeySuper = io.KeysDown[LF_KEY_LEFT_SUPER] || io.KeysDown[LF_KEY_RIGHT_SUPER];
 		return false;
 	}
 
@@ -136,10 +141,10 @@ namespace Leaf {
 		ImGuiIO& io = ImGui::GetIO();
 		io.KeysDown[e.GetKeycode()] = false;
 
-		io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
-		io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
-		io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-		io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+		io.KeyCtrl = io.KeysDown[LF_KEY_LEFT_CONTROL] || io.KeysDown[LF_KEY_RIGHT_CONTROL];
+		io.KeyShift = io.KeysDown[LF_KEY_LEFT_SHIFT] || io.KeysDown[LF_KEY_RIGHT_SHIFT];
+		io.KeyAlt = io.KeysDown[LF_KEY_LEFT_ALT] || io.KeysDown[LF_KEY_RIGHT_ALT];
+		io.KeySuper = io.KeysDown[LF_KEY_LEFT_SUPER] || io.KeysDown[LF_KEY_RIGHT_SUPER];
 		return false;
 	}
 
@@ -154,7 +159,7 @@ namespace Leaf {
 	bool ImGuiLayer::OnResize(WindowResizeEvent& e)
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2(e.GetWidth(), e.GetHeight());
+		io.DisplaySize = ImVec2((float)e.GetWidth(), (float)e.GetHeight());
 		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 		glViewport(0, 0, e.GetWidth(), e.GetHeight());
 

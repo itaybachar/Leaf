@@ -2,9 +2,9 @@
 #include <memory>
 #ifdef LF_PLATFORM_WINDOWS
 	#ifdef LF_BUILD_DLL
-		#define LEAF_API __declspec(dllexport)
+		#define LEAF_API 
 	#else
-		#define LEAF_API __declspec(dllimport)
+		#define LEAF_API 
 	#endif
 #else
 	#error Leaf only supports Windows!

@@ -3,7 +3,7 @@
 #include "Leaf/Application.h"
 #include "Leaf/Logger.h"
 #include "Leaf/KeyCodes.h"
-#include "Leaf/Inputs.h";
+#include "Leaf/Inputs.h"
 
 //#include "examples/imgui_impl_opengl3.cpp"
 //#include "examples/imgui_impl_glfw.cpp"

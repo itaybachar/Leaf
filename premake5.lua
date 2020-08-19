@@ -13,6 +13,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 --Includes for 3rd party libraries
 IncludeDir = {}
+IncludeDir["vendor"] = "Leaf/vendor"
 IncludeDir["GLFW"] = "Leaf/vendor/GLFW/include"
 IncludeDir["Glad"] = "Leaf/vendor/Glad/include"
 IncludeDir["ImGui"] = "Leaf/vendor/ImGui"
@@ -26,9 +27,11 @@ group ""
 
 project "Leaf"
 	location "Leaf"
-	kind "SharedLib"
+	kind "StaticLib"
+	staticruntime "on"
+	
 	language "C++"
-	staticruntime "Off"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -71,35 +74,32 @@ project "Leaf"
 			"LF_PLATFORM_WINDOWS",
 			"LF_BUILD_DLL",
 			"GLFW_INCLUDE_NONE",
-			"LF_ASSERTS"
-		}
-
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+			"LF_ASSERTS",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "configurations:Debug"
 		defines "LF_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 		
 	filter "configurations:Release"
 		defines "LF_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 		
 	filter "configurations:Dist"
 		defines "LF_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
-	staticruntime "Off"
+	staticruntime "on"
 
 	language "C++"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -114,7 +114,8 @@ project "Sandbox"
 	{
 		"Leaf/vendor/spdlog/include",
 		"Leaf/src",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.vendor}"
 	}
 
 	links
@@ -123,7 +124,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -134,14 +134,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "LF_DEBUG"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 		
 	filter "configurations:Release"
 		defines "LF_RELEASE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 		
 	filter "configurations:Dist"
 		defines "LF_DIST"
 		runtime "Release"
-		optimize "On"
+		optimize "on"

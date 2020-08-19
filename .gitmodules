@@ -7,3 +7,6 @@
 [submodule "Leaf\\vendor\\ImGui"]
 	path = Leaf\\vendor\\ImGui
 	url = https://github.com/itaybachar/imgui
+[submodule "Leaf\\vendor\\glm"]
+	path = Leaf\\vendor\\glm
+	url = https://github.com/g-truc/glm

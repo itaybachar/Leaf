@@ -38,7 +38,7 @@ namespace Leaf {
 		int32_t m_RepeatCount;
 	};
 
-	//KeyPress Event
+	//KeyRelease Event
 	class LEAF_API KeyReleaseEvent : public KeyEvent {
 
 	public:
@@ -53,6 +53,23 @@ namespace Leaf {
 		};
 
 		SET_EVENT_TYPE(OnKeyRelease)
+	};
+
+	//KeyTyped Event
+	class LEAF_API KeyTypedEvent : public KeyEvent {
+
+	public:
+		KeyTypedEvent(uint32_t keycode)
+			: KeyEvent(keycode) {}
+
+		//Debugging
+		virtual std::string ToString() const override {
+			std::stringstream s;
+			s << "Key Typed: " << m_Keycode;
+			return s.str();
+		};
+
+		SET_EVENT_TYPE(OnKeyTyped)
 	};
 
 }

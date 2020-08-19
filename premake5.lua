@@ -14,8 +14,15 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 --Includes for 3rd party libraries
 IncludeDir = {}
 IncludeDir["GLFW"] = "Leaf/vendor/GLFW/include"
+IncludeDir["Glad"] = "Leaf/vendor/Glad/include"
+IncludeDir["ImGui"] = "Leaf/vendor/ImGui"
 
-include "Leaf/vendor/GLFW"
+group "Libraries" 
+
+	include "Leaf/vendor/GLFW"
+	include "Leaf/vendor/Glad"
+	include "Leaf/vendor/ImGui"
+group ""
 
 project "Leaf"
 	location "Leaf"
@@ -39,12 +46,16 @@ project "Leaf"
 	{
 		"%{prj.name}/src/",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -56,6 +67,7 @@ project "Leaf"
 		{
 			"LF_PLATFORM_WINDOWS",
 			"LF_BUILD_DLL",
+			"GLFW_INCLUDE_NONE",
 			"LF_ASSERTS"
 		}
 

@@ -20,7 +20,8 @@ public:
 	}
 	
 	virtual void OnEvent(Leaf::IEvent& e) override {
-		LF_TRACE("{0}", e);
+		LF_TRACE("{0}: {1}",GetName(), e);
+		
 	}
 };
 
@@ -28,8 +29,9 @@ class Sandbox : public Leaf::Application
 {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer("Layer1"));
-		PushOverlay(new ExampleLayer("Overlay1"));
+		//PushLayer(new ExampleLayer("Layer1"));
+		//PushOverlay(new ExampleLayer("Overlay1"));
+		PushOverlay(new Leaf::ImGuiLayer());
 	}
 	~Sandbox() {}
 };

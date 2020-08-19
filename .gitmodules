@@ -4,3 +4,6 @@
 [submodule "Leaf\\vendor\\GLFW"]
 	path = Leaf\\vendor\\GLFW
 	url = https://github.com/itaybachar/glfw
+[submodule "Leaf\\vendor\\ImGui"]
+	path = Leaf\\vendor\\ImGui
+	url = https://github.com/itaybachar/imgui

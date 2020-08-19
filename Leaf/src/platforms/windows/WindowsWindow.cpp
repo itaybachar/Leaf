@@ -7,6 +7,7 @@
 #include "Leaf/Events/KeyEvent.h"
 
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Leaf {
 
@@ -33,9 +34,6 @@ namespace Leaf {
 
 	void WindowsWindow::OnUpdate()
 	{
-		glClearColor(0.9f, 0.9f, 0.9f,1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 	}
@@ -69,7 +67,14 @@ namespace Leaf {
 		//Create window
 		m_Window = glfwCreateWindow(m_Data.m_Width, m_Data.m_Height, m_Data.m_Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+
+		int res = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		LF_ASSERT(res, "Failed to load GL Loader! (Glad)");
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
+
+		//Turn on VSync by default
+		SetVSync(true);
 
 		//Set Callbacks
 
@@ -97,6 +102,12 @@ namespace Leaf {
 				break;
 			}
 			}
+			});
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, uint32_t c) {
+			Data& data = *(Data*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent e(c);
+			data.callback(e);
 			});
 
 		//Mouse
@@ -170,9 +181,6 @@ namespace Leaf {
 			}
 			}
 			});
-
-		//Turn on VSync by default
-		SetVSync(true);
 	}
 
 	void WindowsWindow::Shutdown()

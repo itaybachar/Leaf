@@ -20,6 +20,9 @@ namespace Leaf {
 		void OnEvent(IEvent& e);
 
 		void Run();
+
+		inline static Application& Get() { return *s_Instance; }
+		inline Window& GetNativeWindow() { return *m_Leaf; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
@@ -28,6 +31,8 @@ namespace Leaf {
 		LayerStack m_Layers;
 
 		bool m_IsRunning;
+	private:
+		static Application* s_Instance;
 	};
 
 	//To be defined in client

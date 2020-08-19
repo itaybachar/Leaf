@@ -16,6 +16,9 @@ namespace Leaf {
 			return s.str();
 		}
 
+		inline float GetHeight() const { return m_Height; }
+		inline float GetWidth() const { return m_Width; }
+
 		SET_EVENT_TYPE(OnWindowResize)
 		SET_EVENT_CATEGORY(ApplicationEvent)
 	private:

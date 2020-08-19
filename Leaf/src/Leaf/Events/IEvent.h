@@ -11,7 +11,7 @@ namespace Leaf {
 		None = 0,
 		OnWindowResize, OnWindowClose, OnWindowFocus, OnWindowLostFocus,
 		OnMouseButtonPress, OnMouseButtonRelease, OnMouseMove, OnMouseScroll,
-		OnKeyPress, OnKeyRelease,
+		OnKeyPress, OnKeyRelease, OnKeyTyped,
 		OnAppTick, OnAppUpdate, OnAppRender
 	};
 
@@ -28,7 +28,8 @@ namespace Leaf {
 	class LEAF_API IEvent {
 		friend class EventDispatcher;
 	public:
-		
+		bool m_IsHandled = false;
+
 		//Type
 		virtual EventType GetEventType() const = 0;
 		static EventType GetStaticEventType();
@@ -43,13 +44,6 @@ namespace Leaf {
 		inline bool IsInCategory(EventCategory category) {
 			return GetCategory() & category;
 		}
-
-		inline bool IsHandled() const {
-			return m_IsHandled;
-		}
-
-	protected:
-		bool m_IsHandled;
 	};
 
 	//WINDOWS SPECIFIC

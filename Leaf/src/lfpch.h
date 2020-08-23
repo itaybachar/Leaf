@@ -13,6 +13,8 @@
 #include <unordered_map>
 #include <unordered_map>
 
+#include "Leaf/Logger.h"
+
 #ifdef LF_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

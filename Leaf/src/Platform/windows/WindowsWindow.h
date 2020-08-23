@@ -1,5 +1,6 @@
 #pragma once
 #include "Leaf/Window.h"
+#include "Leaf/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;
 
@@ -41,6 +42,7 @@ namespace Leaf {
 
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct Data {
 			std::string m_Title;

@@ -20,6 +20,57 @@ namespace Leaf {
 		//Create ImGui Layer
 		m_ImGuiLayer = new ImGuiLayer();
 		m_Layers.PushOverlay(m_ImGuiLayer);
+
+		//Load Triangle
+
+		glCreateVertexArrays(1, &m_VAO);
+		glBindVertexArray(m_VAO);
+
+		float verts[12] = {
+			-0.5f,0.0f,0.0f,
+			0.5f,-0.0f,0.0f,
+			0.0f,0.5f,0.0f,
+			0.0f,-0.5f,0.0f
+		};
+
+		uint32_t ind[6] = {
+		0,1,2,
+		0,3,1
+		};
+
+		m_VertexBuffer.reset(VertexBuffer::Create(verts, sizeof(verts)));
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+		m_IndexBuffer.reset(IndexBuffer::Create(ind, std::size(ind)));
+	
+		//Shader
+
+		std::string vs = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			out vec3 o_Position;
+
+			void main(){
+				o_Position = a_Position;
+				gl_Position = vec4(a_Position,1.0f);
+			}
+		)";
+
+		std::string fs = R"(
+		#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			in vec3 o_Position;
+
+			void main(){
+				color = vec4(o_Position + 0.5,1);
+			}
+		)";
+
+
+		m_Shader.reset(new Shader(vs, fs));
 	}
 
 	Application::~Application()
@@ -37,6 +88,8 @@ namespace Leaf {
 		//Window Close
 		EventDispatcher handler(e);
 		handler.DispatchEvent<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+		handler.DispatchEvent<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
+
 	}
 
 	void Application::Run()
@@ -45,8 +98,12 @@ namespace Leaf {
 		while (m_IsRunning) {
 
 			//Clear Buffers
-			glClearColor(0.9f, 0.9f, 0.9f, 1);
+			glClearColor(0.15f, 0.15f, 0.15f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+			m_Shader->Bind();
+			//Render Elemets
+			glEnableVertexAttribArray(0);
+			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			//Render normal opengl first
 			for (Layer* l : m_Layers) {
@@ -66,6 +123,12 @@ namespace Leaf {
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_IsRunning = false;
+		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		glViewport(0, 0, e.GetWidth(), e.GetHeight());
 		return true;
 	}
 }

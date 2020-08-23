@@ -1,13 +1,12 @@
 #include "lfpch.h"
-#include "WindowsWindow.h"
-#include "Leaf/Logger.h"
+#include "Platform/windows/WindowsWindow.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 #include "Leaf/Events/ApplicationEvent.h"
 #include "Leaf/Events/MouseEvent.h"
 #include "Leaf/Events/KeyEvent.h"
 
 #include <GLFW/glfw3.h>
-#include <glad/glad.h>
 
 namespace Leaf {
 
@@ -34,7 +33,7 @@ namespace Leaf {
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 		glfwPollEvents();
 	}
 	
@@ -66,10 +65,9 @@ namespace Leaf {
 
 		//Create window
 		m_Window = glfwCreateWindow(m_Data.m_Width, m_Data.m_Height, m_Data.m_Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
 
-		int res = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		LF_ASSERT(res, "Failed to load GL Loader! (Glad)");
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 

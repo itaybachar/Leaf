@@ -12,7 +12,7 @@
 #include "Leaf/ImGui/ImGuiLayer.h"
 
 #include "Leaf/Renderer/Shader.h"
-#include "Leaf/Renderer/Buffer.h"
+#include "Leaf/Renderer/VertexArray.h"
 
 namespace Leaf {
 	class LEAF_API Application
@@ -37,10 +37,12 @@ namespace Leaf {
 
 	private:
 		std::unique_ptr<Window> m_Leaf;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
-		uint32_t m_VAO;
+
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VArray;
+
+		std::shared_ptr<Shader> m_SolidShader;
+		std::shared_ptr<VertexArray> m_SquareVA;
 
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_Layers;

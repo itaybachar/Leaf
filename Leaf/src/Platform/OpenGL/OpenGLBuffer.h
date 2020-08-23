@@ -10,8 +10,17 @@ namespace Leaf {
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
+
+		inline virtual void SetLayout(BufferLayout& layout) override {
+			m_Layout = layout;
+		};
+		inline virtual const BufferLayout& GetLayout() const {
+			return m_Layout;
+		}
+
 	private:
 		uint32_t m_ID;
+		BufferLayout m_Layout;
 	};
 
 	class OpenGLIndexBuffer : public IndexBuffer {

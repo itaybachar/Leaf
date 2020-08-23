@@ -15,7 +15,6 @@ namespace Leaf {
 			LF_CORE_ASSERT(false, "No Render API is not supported!");
 			return nullptr;
 		case RenderAPI::OpenGL:
-			LF_CORE_INFO("IN OPENGL");
 			return new OpenGLVertexBuffer(vertices, size);
 		}
 		return nullptr;

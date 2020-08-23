@@ -6,6 +6,7 @@
 
 #include "Leaf/Events/IEvent.h"
 #include "Leaf/Events/ApplicationEvent.h"
+#include "Leaf/Events/KeyEvent.h"
 
 #include "Leaf/LayerStack.h"
 #include "Leaf/ImGui/ImGuiLayer.h"
@@ -32,6 +33,8 @@ namespace Leaf {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnKeyPress(KeyPressEvent& e);
+
 	private:
 		std::unique_ptr<Window> m_Leaf;
 		std::unique_ptr<Shader> m_Shader;

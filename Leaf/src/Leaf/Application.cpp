@@ -2,6 +2,7 @@
 
 #include "Leaf/Application.h"
 #include "Leaf/Logger.h"
+#include "Leaf/KeyCodes.h"
 
 #include <glad/glad.h>
 
@@ -69,8 +70,7 @@ namespace Leaf {
 			}
 		)";
 
-
-		m_Shader.reset(new Shader(vs, fs));
+		m_Shader.reset(Shader::Create(vs, fs));
 	}
 
 	Application::~Application()
@@ -89,6 +89,7 @@ namespace Leaf {
 		EventDispatcher handler(e);
 		handler.DispatchEvent<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 		handler.DispatchEvent<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
+		handler.DispatchEvent<KeyPressEvent>(BIND_EVENT_FN(Application::OnKeyPress));
 
 	}
 
@@ -100,7 +101,7 @@ namespace Leaf {
 			//Clear Buffers
 			glClearColor(0.15f, 0.15f, 0.15f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
-			m_Shader->Bind();
+
 			//Render Elemets
 			glEnableVertexAttribArray(0);
 			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
@@ -129,6 +130,16 @@ namespace Leaf {
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
 		glViewport(0, 0, e.GetWidth(), e.GetHeight());
+		return true;
+	}
+	bool Application::OnKeyPress(KeyPressEvent& e)
+	{
+		if (e.GetKeycode() == LF_KEY_B)
+			m_Shader->Bind();
+
+		if (e.GetKeycode() == LF_KEY_U)
+			m_Shader->Unbind();
+
 		return true;
 	}
 }

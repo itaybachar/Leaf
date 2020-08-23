@@ -63,7 +63,7 @@ namespace Leaf {
 				ShaderDataType2APIType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				layout.GetStride(),
-				(void*)element.Offset);
+				(const void*)element.Offset);
 			index++;
 		}
 

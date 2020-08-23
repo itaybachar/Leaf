@@ -38,12 +38,6 @@ namespace Leaf {
 	private:
 		std::unique_ptr<Window> m_Leaf;
 
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VArray;
-
-		std::shared_ptr<Shader> m_SolidShader;
-		std::shared_ptr<VertexArray> m_SquareVA;
-
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_Layers;
 

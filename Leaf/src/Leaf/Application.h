@@ -13,6 +13,7 @@
 
 #include "Leaf/Renderer/Shader.h"
 #include "Leaf/Renderer/VertexArray.h"
+#include "Leaf/Renderer/Camera.h"
 
 namespace Leaf {
 	class LEAF_API Application
@@ -37,6 +38,9 @@ namespace Leaf {
 
 	private:
 		std::unique_ptr<Window> m_Leaf;
+		Camera m_Camera;
+
+		float m_Tx = 0.0f, m_Ty = 0.0f,m_Rot = 0.0f;
 
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_Layers;

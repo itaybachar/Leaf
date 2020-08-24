@@ -12,6 +12,7 @@ namespace Leaf {
 
 	
 	Application::Application()
+		: m_Camera(OrthographicCamera(-1.78f, 1.78f, -1.0f, 1.0f))
 	{
 		LF_ASSERT(!s_Instance, "Application is already created!");
 		s_Instance = this;
@@ -54,7 +55,11 @@ namespace Leaf {
 			RenderCommand::SetClearColor({ 0.15f, 0.15f, 0.15f, 1 });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+
+			m_Camera.SetRotate(m_Rot, { 0.0f,0.0f,1.0f });
+			m_Camera.SetTranslation({ m_Tx,m_Ty,0.0f });
+
+			Renderer::BeginScene(m_Camera);
 			{
 				//Render normal opengl first
 				for (Layer* l : m_Layers) {
@@ -86,6 +91,28 @@ namespace Leaf {
 
 	bool Application::OnKeyPress(KeyPressEvent& e)
 	{
+		switch (e.GetKeycode())
+		{
+			case LF_KEY_W:
+				m_Ty += 0.05f;
+				break;
+			case LF_KEY_S:
+				m_Ty -= 0.05f;
+				break;
+			case LF_KEY_A:
+				m_Tx -= 0.05f;
+				break;
+			case LF_KEY_D:
+				m_Tx += 0.05f;
+				break;
+			case LF_KEY_RIGHT:
+				m_Rot += 1.0f;
+				break;
+			case LF_KEY_LEFT:
+				m_Rot -= 1.0f;
+				break;
+		}
+
 		return true;
 	}
 }

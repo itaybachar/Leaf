@@ -10,6 +10,8 @@ namespace Leaf {
 		virtual void Bind() const;
 		virtual void Unbind() const;
 
+		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const;
+
 		inline uint32_t GetProgram() const { return m_ID; }
 	private:
 		uint32_t m_ID;

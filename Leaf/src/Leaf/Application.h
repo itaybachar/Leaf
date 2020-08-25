@@ -1,19 +1,13 @@
 #pragma once
 
 #include "Leaf/Core.h"
-
 #include "Leaf/Window.h"
+#include "Leaf/LayerStack.h"
 
 #include "Leaf/Events/IEvent.h"
 #include "Leaf/Events/ApplicationEvent.h"
-#include "Leaf/Events/KeyEvent.h"
 
-#include "Leaf/LayerStack.h"
 #include "Leaf/ImGui/ImGuiLayer.h"
-
-#include "Leaf/Renderer/Shader.h"
-#include "Leaf/Renderer/VertexArray.h"
-#include "Leaf/Renderer/Camera.h"
 
 namespace Leaf {
 	class LEAF_API Application
@@ -33,19 +27,15 @@ namespace Leaf {
 		inline Window& GetWindow() { return *m_Leaf; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
-		bool OnWindowResize(WindowResizeEvent& e);
-		bool OnKeyPress(KeyPressEvent& e);
 
 	private:
 		std::unique_ptr<Window> m_Leaf;
-		Camera m_Camera;
-
-		float m_Tx = 0.0f, m_Ty = 0.0f,m_Rot = 0.0f;
 
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_Layers;
 
 		bool m_IsRunning;
+		float m_LastTime = 0.0f;
 	private:
 		static Application* s_Instance;
 	};

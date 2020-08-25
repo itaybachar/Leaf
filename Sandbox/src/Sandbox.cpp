@@ -4,7 +4,7 @@
 class ExampleLayer : public Leaf::Layer {
 public:
 	ExampleLayer(const std::string name)
-		: Leaf::Layer(name)
+		: Leaf::Layer(name) , m_Camera(Leaf::OrthographicCamera(-1.78f, 1.78f, -1.0f, 1.0f))
 	{
 		//Diamond
 		#pragma region Diamond
@@ -137,17 +137,36 @@ public:
 	virtual void OnDetach() override {
 	}
 
-	virtual void OnUpdate() override {
-		//LF_INFO("{0} Updated", GetName());
+	virtual void OnUpdate(Leaf::Timestep ts) override {
 
-		Leaf::Renderer::Submit(m_SolidShader,m_SquareVA);
+		LF_INFO("Delta Time {0}s [{1}ms]", ts.GetTime(), ts.GetTimeMili());
+
+		//Input Polling
+		if (Leaf::Inputs::IsKeyPressed(LF_KEY_UP))
+			m_Ty += m_CameraSpeed * ts;
+		if (Leaf::Inputs::IsKeyPressed(LF_KEY_DOWN))
+			m_Ty -= m_CameraSpeed * ts;
+		
+		if (Leaf::Inputs::IsKeyPressed(LF_KEY_LEFT))
+			m_Tx -= m_CameraSpeed * ts;
+		if (Leaf::Inputs::IsKeyPressed(LF_KEY_RIGHT))
+			m_Tx += m_CameraSpeed * ts;
+
+		if (Leaf::Inputs::IsKeyPressed(LF_KEY_A))
+			m_Rot += m_CameraSpeedRot * ts;
+		if (Leaf::Inputs::IsKeyPressed(LF_KEY_D))
+			m_Rot -= m_CameraSpeedRot * ts;
+
+		m_Camera.SetRotate(m_Rot, { 0.0f,0.0f,1.0f });
+		m_Camera.SetTranslation({ m_Tx,m_Ty,0.0f });
+
+		Leaf::Renderer::BeginScene(m_Camera);
+		Leaf::Renderer::Submit(m_SolidShader, m_SquareVA);
 		Leaf::Renderer::Submit(m_Shader, m_VArray);
+		Leaf::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiUpdate() override {
-		//ImGui::Begin("Test Win");
-		//ImGui::Text("Hello Leaf");
-		//ImGui::End();
 	}
 	
 	virtual void OnEvent(Leaf::IEvent& e) override {
@@ -159,6 +178,12 @@ private:
 					
 	std::shared_ptr<Leaf::Shader> m_SolidShader;
 	std::shared_ptr<Leaf::VertexArray> m_SquareVA;
+
+	Leaf::Camera m_Camera;
+
+	float m_Tx = 0.0f, m_Ty = 0.0f, m_Rot = 0.0f;
+	float m_CameraSpeed = 3.0f;
+	float m_CameraSpeedRot = 180.0f;
 };					
 
 class Sandbox : public Leaf::Application

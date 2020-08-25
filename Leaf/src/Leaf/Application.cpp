@@ -7,12 +7,13 @@
 
 #include "Leaf/Renderer/Renderer.h"
 
+#include "Leaf/Core/Platform.h"
+
 namespace Leaf {
 	Application* Application::s_Instance = nullptr;
 
 	
 	Application::Application()
-		: m_Camera(OrthographicCamera(-1.78f, 1.78f, -1.0f, 1.0f))
 	{
 		LF_ASSERT(!s_Instance, "Application is already created!");
 		s_Instance = this;
@@ -41,9 +42,6 @@ namespace Leaf {
 		//Window Close
 		EventDispatcher handler(e);
 		handler.DispatchEvent<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-		handler.DispatchEvent<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
-		handler.DispatchEvent<KeyPressEvent>(BIND_EVENT_FN(Application::OnKeyPress));
-
 	}
 
 	void Application::Run()
@@ -51,68 +49,33 @@ namespace Leaf {
 		//Render Loop
 		while (m_IsRunning) {
 
+			//Timestep
+			float time = Platform::GetTime();
+			Timestep ts = time - m_LastTime;
+			m_LastTime = time;
+
 			//Clear Buffers
 			RenderCommand::SetClearColor({ 0.15f, 0.15f, 0.15f, 1 });
 			RenderCommand::Clear();
 
-
-			m_Camera.SetRotate(m_Rot, { 0.0f,0.0f,1.0f });
-			m_Camera.SetTranslation({ m_Tx,m_Ty,0.0f });
-
-			Renderer::BeginScene(m_Camera);
-			{
-				//Render normal opengl first
-				for (Layer* l : m_Layers) {
-					l->OnUpdate();
-				}
-
-				//Render ImGui
-				m_ImGuiLayer->Begin();
-				for (Layer* l : m_Layers) {
-					l->OnImGuiUpdate();
-				}
-				m_ImGuiLayer->End();
-
-				m_Leaf->OnUpdate();
+			//Render normal opengl first
+			for (Layer* l : m_Layers) {
+				l->OnUpdate(ts);
 			}
-			Renderer::EndScene();
+
+			//Render ImGui
+			m_ImGuiLayer->Begin();
+			for (Layer* l : m_Layers) {
+				l->OnImGuiUpdate();
+			}
+			m_ImGuiLayer->End();
+
+			m_Leaf->OnUpdate();
 		}
 	}
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_IsRunning = false;
-		return true;
-	}
-
-	bool Application::OnWindowResize(WindowResizeEvent& e)
-	{
-		return true;
-	}
-
-	bool Application::OnKeyPress(KeyPressEvent& e)
-	{
-		switch (e.GetKeycode())
-		{
-			case LF_KEY_W:
-				m_Ty += 0.05f;
-				break;
-			case LF_KEY_S:
-				m_Ty -= 0.05f;
-				break;
-			case LF_KEY_A:
-				m_Tx -= 0.05f;
-				break;
-			case LF_KEY_D:
-				m_Tx += 0.05f;
-				break;
-			case LF_KEY_RIGHT:
-				m_Rot += 1.0f;
-				break;
-			case LF_KEY_LEFT:
-				m_Rot -= 1.0f;
-				break;
-		}
-
 		return true;
 	}
 }

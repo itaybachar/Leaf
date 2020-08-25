@@ -1,5 +1,8 @@
 #pragma once
 #include "Leaf/Core.h"
+
+#include "Leaf/Core/Timestep.h"
+
 #include "Leaf/Events/IEvent.h"
 
 namespace Leaf {
@@ -13,7 +16,7 @@ namespace Leaf {
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiUpdate() {}
 		virtual void OnEvent(IEvent& e) {}
 

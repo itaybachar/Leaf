@@ -179,6 +179,7 @@ namespace Leaf {
 			}
 			}
 			});
+
 	}
 
 	void WindowsWindow::Shutdown()

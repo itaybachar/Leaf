@@ -22,6 +22,8 @@ namespace Leaf {
 		m_Leaf->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		m_IsRunning = true;
 
+		Renderer::Init();
+
 		//Create ImGui Layer
 		m_ImGuiLayer = new ImGuiLayer();
 		m_Layers.PushOverlay(m_ImGuiLayer);

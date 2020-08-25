@@ -18,6 +18,7 @@ IncludeDir["GLFW"] = "Leaf/vendor/GLFW/include"
 IncludeDir["Glad"] = "Leaf/vendor/Glad/include"
 IncludeDir["ImGui"] = "Leaf/vendor/ImGui"
 IncludeDir["glm"] = "Leaf/vendor/glm"
+IncludeDir["stb"] = "Leaf/vendor/stb"
 
 group "Libraries" 
 	include "Leaf/vendor/GLFW"
@@ -43,6 +44,8 @@ project "Leaf"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb/stb/**.cpp",
+		"%{prj.name}/vendor/stb/stb/**.h",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
@@ -54,7 +57,8 @@ project "Leaf"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb}"
 	}
 
 	links

@@ -6,6 +6,9 @@ namespace Leaf {
 
 	class Renderer {
 	public:
+
+		static void Init();
+
 		static void BeginScene(Camera& camera);
 		static void EndScene();
 

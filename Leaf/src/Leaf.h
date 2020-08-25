@@ -7,6 +7,7 @@
 #include "Leaf/KeyCodes.h"
 
 #include "Leaf/Renderer/Renderer.h"
+#include "Leaf/Renderer/Texture.h"
 
 #include "Leaf/Events/ApplicationEvent.h"
 #include "Leaf/Events/KeyEvent.h"

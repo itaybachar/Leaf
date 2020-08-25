@@ -43,11 +43,11 @@ public:
 
 		//Test 2
 		#pragma region Backdrop
-		float square[4 * 3] = {
-			-0.50f,-0.50f,0.0f,
-			0.50f,-0.50f,0.0f,
-			0.50f,0.50f,0.0f,
-			-0.50f,0.50f,0.0f,
+		float square[4 * 5] = {
+			-0.50f,-0.50f,0.0f, 0.0f, 0.0f,
+			0.50f,-0.50f,0.0f,  1.0f, 0.0f,
+			0.50f,0.50f,0.0f,   1.0f, 1.0f,
+			-0.50f,0.50f,0.0f,  0.0f, 1.0f
 		};
 
 		uint32_t squareInd[6] = {
@@ -60,7 +60,8 @@ public:
 		vertexBuffer.reset(Leaf::VertexBuffer::Create(square, sizeof(square)));
 
 		layout = {
-			{Leaf::ShaderDataType::Float3, "a_Position"}
+			{Leaf::ShaderDataType::Float3, "a_Position"},
+			{Leaf::ShaderDataType::Float2, "a_TexCoord"}
 		};
 
 		vertexBuffer->SetLayout(layout);
@@ -129,9 +130,48 @@ public:
 			}
 		)";
 
+		std::string texturevs = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;		
+
+			out vec2 v_TexCoord;
+
+			void main(){
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position,1.0f);
+			}
+		)";
+
+		std::string texturefs = R"(
+		#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			
+			uniform sampler2D u_Texture;
+
+			in vec2 v_TexCoord;
+
+			void main(){
+				color = vec4(v_TexCoord,0.0,1.0);
+				color = texture(u_Texture,v_TexCoord);
+			}
+		)";
+
 		m_Shader.reset(Leaf::Shader::Create(vs, fs));
 		m_SolidShader.reset(Leaf::Shader::Create(flatColorvs, flatColorfs));
+		m_TextureShader.reset(Leaf::Shader::Create(texturevs, texturefs));
 #pragma endregion
+
+		//m_Texture = Leaf::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_Texture = Leaf::Texture2D::Create("assets/textures/Creed.jpg");
+
+		std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_TextureShader)->UploadUniformFloat("u_Texture", 0);
 	}
 
 	virtual void OnAttach() override {
@@ -166,6 +206,7 @@ public:
 
 		int gridSize = 20;
 
+		
 		for (int y = 0; y < gridSize; y++)
 		{
 
@@ -181,7 +222,13 @@ public:
 			}
 		}
 		
-		Leaf::Renderer::Submit(m_Shader, m_VArray);
+		
+		//Texture
+		m_Texture->Bind();
+		Leaf::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1), glm::vec3(1.5f)));
+
+		//Diamond
+		//Leaf::Renderer::Submit(m_Shader, m_VArray);
 		Leaf::Renderer::EndScene();
 	}
 
@@ -215,6 +262,9 @@ private:
 	
 	Leaf::Ref<Leaf::Shader> m_SolidShader;
 	Leaf::Ref<Leaf::VertexArray> m_SquareVA;
+
+	Leaf::Ref<Leaf::Shader> m_TextureShader;
+	Leaf::Ref<Leaf::Texture> m_Texture;
 
 	Leaf::Camera m_Camera;
 

@@ -41,7 +41,7 @@ namespace Leaf {
 	}
 	
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top, float nearClip, float farClip)
-		: Camera(glm::ortho(left, right, bottom, top, nearClip, farClip))
+		:Camera(glm::ortho(left, right, bottom, top, nearClip, farClip))
 	{
 	}
 }

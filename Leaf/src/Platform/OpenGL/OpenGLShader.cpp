@@ -130,6 +130,48 @@ namespace Leaf {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::UploadUniformInt(const std::string& name, int value) const
+	{
+		GLint location = glGetUniformLocation(m_ID, name.c_str());
+		glUniform1i(location, value);
+	}
+
+	void OpenGLShader::UploadUniformFloat(const std::string& name, float value) const
+	{
+		GLint location = glGetUniformLocation(m_ID, name.c_str());
+		glUniform1f(location, value);
+	}
+
+	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& values) const
+	{
+		GLint location = glGetUniformLocation(m_ID, name.c_str());
+		glUniform2fv(location, 1, glm::value_ptr(values));
+	}
+
+	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& values) const
+	{
+		GLint location = glGetUniformLocation(m_ID, name.c_str());
+		glUniform3fv(location, 1, glm::value_ptr(values));
+	}
+
+	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& values) const
+	{
+		GLint location = glGetUniformLocation(m_ID, name.c_str());
+		glUniform4fv(location, 1,glm::value_ptr(values));
+	}
+
+	void OpenGLShader::UploadUniformMat2(const std::string& name, const glm::mat2& matrix) const
+	{
+		GLint location = glGetUniformLocation(m_ID, name.c_str());
+		glUniformMatrix2fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix) const
+	{
+		GLint location = glGetUniformLocation(m_ID, name.c_str());
+		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
 	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const
 	{
 		GLint location = glGetUniformLocation(m_ID, name.c_str());

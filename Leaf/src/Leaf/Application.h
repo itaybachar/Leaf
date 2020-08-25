@@ -29,7 +29,7 @@ namespace Leaf {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
-		std::unique_ptr<Window> m_Leaf;
+		Scope<Window> m_Leaf;
 
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_Layers;

@@ -59,11 +59,8 @@ namespace Leaf {
 
 	void ImGuiLayer::OnImGuiUpdate()
 	{
-		if (Inputs::IsKeyPressed(LF_KEY_TAB))
-			LF_CORE_WARN("Tab is pressed!");
-
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		//static bool show = true;
+		//ImGui::ShowDemoWindow(&show);
 	}
 
 	void ImGuiLayer::Begin() {

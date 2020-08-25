@@ -18,7 +18,7 @@ namespace Leaf {
 		LF_ASSERT(!s_Instance, "Application is already created!");
 		s_Instance = this;
 
-		m_Leaf = std::unique_ptr<Window>(Window::Create());
+		m_Leaf = Scope<Window>(Window::Create());
 		m_Leaf->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		m_IsRunning = true;
 

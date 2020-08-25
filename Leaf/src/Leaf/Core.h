@@ -1,11 +1,16 @@
 #pragma once
 #include <memory>
+
 #ifdef LF_PLATFORM_WINDOWS
+#ifdef LF_DYNAMIC_BUILD
 	#ifdef LF_BUILD_DLL
-		#define LEAF_API 
+		#define LEAF_API __declspec(dllexport)
 	#else
-		#define LEAF_API 
+		#define LEAF_API __declspec(dllimport)
 	#endif
+#else 
+	#define LEAF_API
+#endif
 #else
 	#error Leaf only supports Windows!
 #endif
@@ -20,3 +25,13 @@
 
 #define BIND_EVENT_FN(x) std::bind(&x,this,std::placeholders::_1)
 #define BIT(x) (1<<x)
+
+namespace Leaf {
+
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+}

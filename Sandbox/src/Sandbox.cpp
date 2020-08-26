@@ -23,10 +23,10 @@ public:
 		0,3,1
 		};
 
-		m_VArray.reset(Leaf::VertexArray::Create());
+		m_VArray = Leaf::VertexArray::Create();
 
 		Leaf::Ref<Leaf::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Leaf::VertexBuffer::Create(diamond, sizeof(diamond)));
+		vertexBuffer = Leaf::VertexBuffer::Create(diamond, sizeof(diamond));
 
 		Leaf::BufferLayout layout = {
 			{Leaf::ShaderDataType::Float3, "a_Position"},
@@ -37,7 +37,7 @@ public:
 		m_VArray->AddVertexBuffer(vertexBuffer);
 
 		Leaf::Ref<Leaf::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Leaf::IndexBuffer::Create(diamondInd, (uint32_t)std::size(diamondInd)));
+		indexBuffer = Leaf::IndexBuffer::Create(diamondInd, (uint32_t)std::size(diamondInd));
 		m_VArray->SetIndexBuffer(indexBuffer);
 		#pragma endregion
 
@@ -55,9 +55,9 @@ public:
 		0,2,3
 		};
 
-		m_SquareVA.reset(Leaf::VertexArray::Create());
+		m_SquareVA = Leaf::VertexArray::Create();
 
-		vertexBuffer.reset(Leaf::VertexBuffer::Create(square, sizeof(square)));
+		vertexBuffer = Leaf::VertexBuffer::Create(square, sizeof(square));
 
 		layout = {
 			{Leaf::ShaderDataType::Float3, "a_Position"},
@@ -67,7 +67,7 @@ public:
 		vertexBuffer->SetLayout(layout);
 		m_SquareVA->AddVertexBuffer(vertexBuffer);
 
-		indexBuffer.reset(Leaf::IndexBuffer::Create(squareInd, (uint32_t)std::size(squareInd)));
+		indexBuffer = Leaf::IndexBuffer::Create(squareInd, (uint32_t)std::size(squareInd));
 		m_SquareVA->SetIndexBuffer(indexBuffer);
 		#pragma endregion
 		
@@ -130,45 +130,13 @@ public:
 			}
 		)";
 
-		std::string texturevs = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;		
-
-			out vec2 v_TexCoord;
-
-			void main(){
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position,1.0f);
-			}
-		)";
-
-		std::string texturefs = R"(
-		#version 330 core
-			
-			layout(location = 0) out vec4 color;
-			
-			uniform sampler2D u_Texture;
-
-			in vec2 v_TexCoord;
-
-			void main(){
-				color = vec4(v_TexCoord,0.0,1.0);
-				color = texture(u_Texture,v_TexCoord);
-			}
-		)";
-
-		m_Shader.reset(Leaf::Shader::Create(vs, fs));
-		m_SolidShader.reset(Leaf::Shader::Create(flatColorvs, flatColorfs));
-		m_TextureShader.reset(Leaf::Shader::Create(texturevs, texturefs));
+		m_Shader = Leaf::Shader::Create(vs, fs);
+		m_SolidShader = Leaf::Shader::Create(flatColorvs, flatColorfs);
+		m_TextureShader = Leaf::Shader::Create("assets/shaders/Texture.glsl");
 #pragma endregion
 
-		//m_Texture = Leaf::Texture2D::Create("assets/textures/Checkerboard.png");
-		m_Texture = Leaf::Texture2D::Create("assets/textures/Creed.jpg");
+		m_Texture = Leaf::Texture2D::Create(tex[0]);
+		m_Texture->Bind();
 
 		std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_TextureShader)->UploadUniformFloat("u_Texture", 0);
@@ -206,7 +174,7 @@ public:
 
 		int gridSize = 20;
 
-		
+		m_SolidShader->Bind();
 		for (int y = 0; y < gridSize; y++)
 		{
 
@@ -222,9 +190,8 @@ public:
 			}
 		}
 		
-		
 		//Texture
-		m_Texture->Bind();
+		//m_Texture->Bind();
 		Leaf::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1), glm::vec3(1.5f)));
 
 		//Diamond
@@ -249,6 +216,7 @@ public:
 	virtual void OnEvent(Leaf::IEvent& e) override {
 		Leaf::EventDispatcher disp(e);
 		disp.DispatchEvent<Leaf::MouseScrollEvent>(BIND_EVENT_FN(ExampleLayer::OnScroll));
+		disp.DispatchEvent<Leaf::KeyPressEvent>(BIND_EVENT_FN(ExampleLayer::SwapTex));
 	}
 
 	bool ExampleLayer::OnScroll(Leaf::MouseScrollEvent& e) {
@@ -256,7 +224,27 @@ public:
 
 		return true;
 	}
+
+	bool ExampleLayer::SwapTex(Leaf::KeyPressEvent& e) {
+		if (e.GetKeycode() == LF_KEY_ENTER) {
+			index++;
+			m_Texture = Leaf::Texture2D::Create(tex[index % 4]);
+			m_Texture->Bind();
+		}
+		
+		return true;
+	}
+
 private:
+
+	std::string tex[4] = {
+		"assets/textures/1.png",
+		"assets/textures/Checkerboard.png",
+		"assets/textures/Creed.jpg",
+		"assets/textures/poop.png"
+	};
+	int index = 0;
+
 	Leaf::Ref<Leaf::Shader> m_Shader;
 	Leaf::Ref<Leaf::VertexArray> m_VArray;
 	

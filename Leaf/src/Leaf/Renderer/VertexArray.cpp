@@ -5,7 +5,7 @@
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace Leaf {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -13,7 +13,7 @@ namespace Leaf {
 			LF_CORE_ASSERT(false, "No Render API is not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexArray();
+			return std::make_shared<OpenGLVertexArray>();
 		}
 		return nullptr;
 	}

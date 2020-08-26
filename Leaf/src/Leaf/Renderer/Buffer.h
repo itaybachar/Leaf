@@ -104,7 +104,7 @@ namespace Leaf {
 		virtual const BufferLayout& GetLayout() const = 0;
 
 	public:
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 	class IndexBuffer {
@@ -117,6 +117,6 @@ namespace Leaf {
 		virtual uint32_t GetCount() const = 0;
 
 	public:
-		static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	};
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "lfpch.h"
-#include "Leaf/Core.h"
+#include "Leaf/Core/Core.h"
 
 namespace Leaf {
 

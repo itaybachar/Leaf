@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Leaf/Events/IEvent.h"
 
 namespace Leaf {

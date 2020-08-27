@@ -28,7 +28,7 @@ namespace Leaf {
 		UpdateViewProjectionMatrix();
 	}
 	
-	void Camera::SetRotate(float angle, const glm::vec3& axis)
+	void Camera::SetRotation(float angle, const glm::vec3& axis)
 	{
 		m_Rotation = { axis, angle };
 		UpdateViewProjectionMatrix();
@@ -43,5 +43,16 @@ namespace Leaf {
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top, float nearClip, float farClip)
 		:Camera(glm::ortho(left, right, bottom, top, nearClip, farClip))
 	{
+	}
+
+	void OrthographicCamera::SetProjection(float left, float right, float bottom, float top, float nearClip, float farClip)
+	{
+		m_Projection = glm::ortho(left, right, bottom, top, nearClip, farClip);
+		m_ViewProjection = m_Projection * m_View;
+	}
+
+	void OrthographicCamera::SetRotation(float angle)
+	{
+		Camera::SetRotation(angle, { 0.0f,0.0f,1.0f });
 	}
 }

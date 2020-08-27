@@ -1,5 +1,5 @@
 #pragma once
-#include "Leaf/Window.h"
+#include "Leaf/Core/Window.h"
 #include "Leaf/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;

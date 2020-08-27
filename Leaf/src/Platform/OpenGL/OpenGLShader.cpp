@@ -21,12 +21,15 @@ namespace Leaf {
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+		m_Name = std::filesystem::path(filepath).stem().string();
+
 		std::string file = ReadFile(filepath);
 		auto sources = PreProcess(file);
 		Compile(sources);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& pixelSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& pixelSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -43,7 +46,7 @@ namespace Leaf {
 	{
 		std::string source;
 
-		std::ifstream file(filepath, std::ios::in, std::ios::binary);
+		std::ifstream file(filepath, std::ios::in | std::ios::binary);
 		
 		//TODO: Should Break
 		LF_CORE_ASSERT(file, "Could not open file '{0'", filepath);
@@ -86,7 +89,8 @@ namespace Leaf {
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& sources)
 	{
 		//Cache shader ids
-		std::vector<GLuint> shaderIds(sources.size());
+		std::array<GLuint, 2> shaderIds;
+		int shaderIndex = 0;
 
 		uint32_t program = glCreateProgram();
 		//Compile Sources
@@ -124,7 +128,7 @@ namespace Leaf {
 			glAttachShader(program, shader);
 			
 			//Save Shader for later
-			shaderIds.push_back(shader);
+			shaderIds[shaderIndex++] = program;
 		}
 
 		// Link our program

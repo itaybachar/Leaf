@@ -1,13 +1,12 @@
 #include "lfpch.h"
 
-#include "Leaf/Application.h"
-#include "Leaf/Logger.h"
-#include "Leaf/KeyCodes.h"
-#include "Leaf/Inputs.h"
+#include "Leaf/Core/Application.h"
+#include "Leaf/Core/Platform.h"
+#include "Leaf/Core/KeyCodes.h"
+#include "Leaf/Core/Inputs.h"
 
 #include "Leaf/Renderer/Renderer.h"
 
-#include "Leaf/Core/Platform.h"
 
 namespace Leaf {
 	Application* Application::s_Instance = nullptr;
@@ -44,6 +43,7 @@ namespace Leaf {
 		//Window Close
 		EventDispatcher handler(e);
 		handler.DispatchEvent<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+		handler.DispatchEvent<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 	}
 
 	void Application::Run()
@@ -60,9 +60,12 @@ namespace Leaf {
 			RenderCommand::SetClearColor({ 0.15f, 0.15f, 0.15f, 1 });
 			RenderCommand::Clear();
 
-			//Render normal opengl first
-			for (Layer* l : m_Layers) {
-				l->OnUpdate(ts);
+			if (!m_Minimized)
+			{
+				//Render normal opengl first
+				for (Layer* l : m_Layers) {
+					l->OnUpdate(ts);
+				}
 			}
 
 			//Render ImGui
@@ -75,10 +78,24 @@ namespace Leaf {
 			m_Leaf->OnUpdate();
 		}
 	}
+
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_IsRunning = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		m_Minimized = false;
+
+		//Window Minimized
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+		}
+		
+		return false;
 	}
 }
 

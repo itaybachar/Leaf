@@ -1,5 +1,5 @@
 #pragma once
-#include "Leaf/Core.h"
+#include "Leaf/Core/Core.h"
 
 namespace Leaf {
 	class LEAF_API Inputs {

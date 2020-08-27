@@ -1,8 +1,6 @@
 #include "lfpch.h"
 
-#include "Logger.h"
-
-#include "spdlog/sinks/stdout_color_sinks.h"
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace Leaf {
 	std::shared_ptr<spdlog::logger> Logger::s_CoreLogger;

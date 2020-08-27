@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Leaf/Renderer/Shader.h"
 
 namespace Leaf {

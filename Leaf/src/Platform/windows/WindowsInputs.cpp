@@ -1,7 +1,8 @@
 #pragma once
 #include "lfpch.h"
-#include "Leaf/Application.h"
-#include "Leaf/Inputs.h"
+
+#include "Leaf/Core/Application.h"
+#include "Leaf/Core/Inputs.h"
 
 #include <GLFW/glfw3.h>
 

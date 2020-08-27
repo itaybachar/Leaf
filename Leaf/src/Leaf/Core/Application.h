@@ -1,10 +1,8 @@
 #pragma once
+#include "Leaf/Core/Core.h"
+#include "Leaf/Core/Window.h"
+#include "Leaf/Core/LayerStack.h"
 
-#include "Leaf/Core.h"
-#include "Leaf/Window.h"
-#include "Leaf/LayerStack.h"
-
-#include "Leaf/Events/IEvent.h"
 #include "Leaf/Events/ApplicationEvent.h"
 
 #include "Leaf/ImGui/ImGuiLayer.h"
@@ -28,6 +26,8 @@ namespace Leaf {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
+		bool OnWindowResize(WindowResizeEvent& e);
+
 	private:
 		Scope<Window> m_Leaf;
 
@@ -35,6 +35,7 @@ namespace Leaf {
 		LayerStack m_Layers;
 
 		bool m_IsRunning;
+		bool m_Minimized = false;
 		float m_LastTime = 0.0f;
 	private:
 		static Application* s_Instance;

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Leaf/Renderer/Buffer.h"
 
 namespace Leaf {

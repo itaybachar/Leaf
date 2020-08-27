@@ -1,4 +1,5 @@
 #include "lfpch.h"
+
 #include "Platform/windows/WindowsWindow.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 

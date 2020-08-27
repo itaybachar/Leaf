@@ -1,17 +1,17 @@
 #include "lfpch.h"
-#include "Leaf/ImGui/ImGuiLayer.h"
-#include "Leaf/Application.h"
-#include "Leaf/Logger.h"
-#include "Leaf/KeyCodes.h"
-#include "Leaf/Inputs.h"
 
-//#include "examples/imgui_impl_opengl3.cpp"
-//#include "examples/imgui_impl_glfw.cpp"
+#include "Leaf/Core/Application.h"
+#include "Leaf/Core/KeyCodes.h"
+#include "Leaf/Core/Inputs.h"
+
+#include "Leaf/ImGui/ImGuiLayer.h"
+
 #include <imgui.h>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <examples\imgui_impl_opengl3.h>
 #include <examples\imgui_impl_glfw.h>
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace Leaf {
 
@@ -33,8 +33,8 @@ namespace Leaf {
 		//io.ConfigViewportsNoTaskBarIcon = true;
 
 		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
+		//ImGui::StyleColorsDark();
+		ImGui::StyleColorsClassic();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();

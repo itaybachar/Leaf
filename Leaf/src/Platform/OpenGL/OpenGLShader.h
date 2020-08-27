@@ -10,12 +10,14 @@ namespace Leaf {
 	class OpenGLShader : public Shader {
 	public:
 		OpenGLShader(const std::string& filepath);
-		OpenGLShader(const std::string& vertexSrc, const std::string& pixelSrc);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& pixelSrc);
 
 		virtual ~OpenGLShader();
 		
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
+
+		inline const std::string& GetName() const override { return m_Name; }
 
 		void UploadUniformInt(const std::string& name, int value) const;
 
@@ -37,5 +39,6 @@ namespace Leaf {
 
 	private:
 		uint32_t m_ID;
+		std::string m_Name;
 	};
 }

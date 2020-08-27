@@ -2,12 +2,12 @@
 #include <ImGui/imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <Platform\OpenGL\OpenGLShader.h>
+#include <Platform/OpenGL/OpenGLShader.h>
 
 class ExampleLayer : public Leaf::Layer {
 public:
 	ExampleLayer(const std::string name)
-		: Leaf::Layer(name) , m_Camera(Leaf::OrthographicCamera(-1.78f, 1.78f, -1.0f, 1.0f))
+		: Leaf::Layer(name) , m_CameraController(1280.0f/720.0f)
 	{
 		//Diamond
 		#pragma region Diamond
@@ -130,16 +130,17 @@ public:
 			}
 		)";
 
-		m_Shader = Leaf::Shader::Create(vs, fs);
-		m_SolidShader = Leaf::Shader::Create(flatColorvs, flatColorfs);
-		m_TextureShader = Leaf::Shader::Create("assets/shaders/Texture.glsl");
+		m_ShaderMan.Add(Leaf::Shader::Create("Diamond",vs, fs));
+		m_ShaderMan.Add(Leaf::Shader::Create("FlatColor",flatColorvs, flatColorfs));
+		m_ShaderMan.Load("assets/shaders/Texture.glsl");
 #pragma endregion
 
 		m_Texture = Leaf::Texture2D::Create(tex[0]);
 		m_Texture->Bind();
 
-		std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_TextureShader)->UploadUniformFloat("u_Texture", 0);
+		auto& shader = m_ShaderMan.Get("Texture");
+		std::dynamic_pointer_cast<Leaf::OpenGLShader>(shader)->Bind();
+		std::dynamic_pointer_cast<Leaf::OpenGLShader>(shader)->UploadUniformFloat("u_Texture", 0);
 	}
 
 	virtual void OnAttach() override {
@@ -149,32 +150,15 @@ public:
 
 	virtual void OnUpdate(Leaf::Timestep ts) override {
 
-		//Input Polling
-		if (Leaf::Inputs::IsKeyPressed(LF_KEY_UP))
-			m_Ty += m_CameraSpeed * ts;
-		if (Leaf::Inputs::IsKeyPressed(LF_KEY_DOWN))
-			m_Ty -= m_CameraSpeed * ts;
-		
-		if (Leaf::Inputs::IsKeyPressed(LF_KEY_LEFT))
-			m_Tx -= m_CameraSpeed * ts;
-		if (Leaf::Inputs::IsKeyPressed(LF_KEY_RIGHT))
-			m_Tx += m_CameraSpeed * ts;
-
-		if (Leaf::Inputs::IsKeyPressed(LF_KEY_A))
-			m_Rot += m_CameraSpeedRot * ts;
-		if (Leaf::Inputs::IsKeyPressed(LF_KEY_D))
-			m_Rot -= m_CameraSpeedRot * ts;
-
-		m_Camera.SetRotate(m_Rot, { 0.0f,0.0f,1.0f });
-		m_Camera.SetTranslation({ m_Tx,m_Ty,0.0f });
+		m_CameraController.OnUpdate(ts);
 
 		glm::mat4 scale = glm::scale(glm::mat4(1), glm::vec3(0.1f));
 
-		Leaf::Renderer::BeginScene(m_Camera);
+		Leaf::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		int gridSize = 20;
-
-		m_SolidShader->Bind();
+		auto& shader = m_ShaderMan.Get("FlatColor");
+		shader->Bind();
 		for (int y = 0; y < gridSize; y++)
 		{
 
@@ -182,17 +166,18 @@ public:
 			{
 				glm::mat4 transform = glm::translate(glm::mat4(1), { x * 0.11f, y * 0.11f, 1.0f }) * scale;
 				if ((x+y) % 2 == 0)
-					std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_SolidShader)->UploadUniformFloat4("u_Color",m_ColorA);
+					std::dynamic_pointer_cast<Leaf::OpenGLShader>(shader)->UploadUniformFloat4("u_Color",m_ColorA);
 				else
-					std::dynamic_pointer_cast<Leaf::OpenGLShader>(m_SolidShader)->UploadUniformFloat4("u_Color", m_ColorB);
+					std::dynamic_pointer_cast<Leaf::OpenGLShader>(shader)->UploadUniformFloat4("u_Color", m_ColorB);
 				
-				Leaf::Renderer::Submit(m_SolidShader, m_SquareVA,transform);
+				Leaf::Renderer::Submit(shader, m_SquareVA,transform);
 			}
 		}
 		
 		//Texture
 		//m_Texture->Bind();
-		Leaf::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1), glm::vec3(1.5f)));
+		shader = m_ShaderMan.Get("Texture");
+		Leaf::Renderer::Submit(shader, m_SquareVA, glm::scale(glm::mat4(1), glm::vec3(1.5f)));
 
 		//Diamond
 		//Leaf::Renderer::Submit(m_Shader, m_VArray);
@@ -214,15 +199,10 @@ public:
 	}
 	
 	virtual void OnEvent(Leaf::IEvent& e) override {
+		m_CameraController.OnEvent(e);
+
 		Leaf::EventDispatcher disp(e);
-		disp.DispatchEvent<Leaf::MouseScrollEvent>(BIND_EVENT_FN(ExampleLayer::OnScroll));
 		disp.DispatchEvent<Leaf::KeyPressEvent>(BIND_EVENT_FN(ExampleLayer::SwapTex));
-	}
-
-	bool ExampleLayer::OnScroll(Leaf::MouseScrollEvent& e) {
-		m_Tz += e.GetYOffset() * 0.05f;
-
-		return true;
 	}
 
 	bool ExampleLayer::SwapTex(Leaf::KeyPressEvent& e) {
@@ -245,20 +225,14 @@ private:
 	};
 	int index = 0;
 
-	Leaf::Ref<Leaf::Shader> m_Shader;
 	Leaf::Ref<Leaf::VertexArray> m_VArray;
 	
-	Leaf::Ref<Leaf::Shader> m_SolidShader;
 	Leaf::Ref<Leaf::VertexArray> m_SquareVA;
 
-	Leaf::Ref<Leaf::Shader> m_TextureShader;
+	Leaf::ShaderManager m_ShaderMan;
 	Leaf::Ref<Leaf::Texture> m_Texture;
 
-	Leaf::Camera m_Camera;
-
-	float m_Tx = 0.0f, m_Ty = 0.0f, m_Tz = 0.0f, m_Rot = 0.0f;
-	float m_CameraSpeed = 3.0f;
-	float m_CameraSpeedRot = 180.0f;
+	Leaf::OrthographicCameraController m_CameraController;
 
 	glm::vec4 m_ColorA = glm::vec4(0.0f), m_ColorB = glm::vec4(1.0f);
 };					

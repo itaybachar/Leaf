@@ -8,7 +8,7 @@ namespace Leaf {
 		virtual ~Camera() {};
 
 		void SetTranslation(const glm::vec3& translate);
-		void SetRotate(float angle, const glm::vec3& axis);
+		void SetRotation(float angle, const glm::vec3& axis);
 		void SetScale(const glm::vec3& scale);
 
 		inline const glm::mat4& GetProjection() const { return m_Projection; }
@@ -34,5 +34,9 @@ namespace Leaf {
 			: OrthographicCamera(-width / 2, width / 2, -height / 2, height / 2) {}
 
 		OrthographicCamera(float left, float right, float bottom, float top, float nearClip = 1, float farClip = -1);
+
+		void SetProjection(float left, float right, float bottom, float top, float nearClip = 1, float farClip = -1);
+
+		void SetRotation(float angle);
 	};
 }

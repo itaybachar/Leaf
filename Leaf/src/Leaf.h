@@ -7,7 +7,6 @@
 #include "Leaf/Core/Logger.h"
 #include "Leaf/Core/Inputs.h"
 #include "Leaf/Core/KeyCodes.h"
-#include "Leaf/Core/EntryPoint.h"
 //--------------------------------------------
 
 

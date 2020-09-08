@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Platform/OpenGL/OpenGLShader.h>
 
+#include "Sandbox2D.h"
+
 class ExampleLayer : public Leaf::Layer {
 public:
 	ExampleLayer(const std::string name)
@@ -177,7 +179,7 @@ public:
 		//Texture
 		//m_Texture->Bind();
 		shader = m_ShaderMan.Get("Texture");
-		Leaf::Renderer::Submit(shader, m_SquareVA, glm::scale(glm::mat4(1), glm::vec3(1.5f)));
+		Leaf::Renderer::Submit(shader, m_SquareVA, glm::scale(glm::mat4(1), glm::vec3(1.125f,2.0f,0.0f)));
 
 		//Diamond
 		//Leaf::Renderer::Submit(m_Shader, m_VArray);
@@ -208,7 +210,7 @@ public:
 	bool ExampleLayer::SwapTex(Leaf::KeyPressEvent& e) {
 		if (e.GetKeycode() == LF_KEY_ENTER) {
 			index++;
-			m_Texture = Leaf::Texture2D::Create(tex[index % 4]);
+			m_Texture = Leaf::Texture2D::Create(tex[index % 5]);
 			m_Texture->Bind();
 		}
 		
@@ -216,9 +218,9 @@ public:
 	}
 
 private:
-
-	std::string tex[4] = {
+	std::string tex[5] = {
 		"assets/textures/1.png",
+		"assets/textures/2.jpg",
 		"assets/textures/Checkerboard.png",
 		"assets/textures/Creed.jpg",
 		"assets/textures/poop.png"
@@ -241,7 +243,8 @@ class Sandbox : public Leaf::Application
 {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer("Layer1"));
+		//PushLayer(new ExampleLayer("Layer1"));
+		PushLayer(new Sandbox2D());
 	}
 	~Sandbox() {}
 };
